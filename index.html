@@ -1,1 +1,298 @@
-<!DOCTYPE html><html lang="da"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Familierutiner</title><style>body{font-family:Arial;margin:0;background:#f3f3f3}header{text-align:center;padding:15px}#home,.child{padding:15px}.kids{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}.card{width:260px;padding:20px;border-radius:18px;text-align:center;font-weight:bold;cursor:pointer}.luna{background:#f4cf4f}.ene{background:#f8b7dd}.manfred{background:#ff7272}.hidden{display:none}.task{background:#fff;margin:6px 0;padding:10px;border-radius:8px}.btn{padding:10px 15px;border:none;border-radius:8px;background:#333;color:#fff}.tree{text-align:center;font-size:50px}</style></head><body><div id="home"><header><h1>Familierutiner</h1><div class="tree" id="tree">🌱</div><div>Familiepoint: <span id="points">0</span></div></header><div class="kids"><div class="card luna" onclick="openChild('luna')">🌙<br>LUNA<br>⭐ <span id='sluna'>0</span></div><div class="card ene" onclick="openChild('ene')">🦄<br>ENE<br>⭐ <span id='sene'>0</span></div><div class="card manfred" onclick="openChild('manfred')">🦖<br>MANFRED<br>⭐ <span id='smanfred'>0</span></div></div></div><div id="child" class="child hidden"><button class='btn' onclick='goHome()'>Tilbage</button><h2 id='name'></h2><div id='tasks'></div></div><script>const kids={luna:{n:'LUNA',a:'🌙'},ene:{n:'ENE',a:'🦄'},manfred:{n:'MANFRED',a:'🦖'}};let db=JSON.parse(localStorage.getItem('famrutiner')||'{}');let current='';function save(){localStorage.setItem('famrutiner',JSON.stringify(db));updateHome()}function getStars(id){return db[id+'_stars']||0}function weekday(){let d=new Date().getDay();return !(d===0||d===6)}function taskset(id){let m=['Toilet','Nattøj til vask','Tøj på','Morgenmad','Skål i opvasker'];if(id!='manfred')m.push('Rede hår');if(id=='luna')m.push('Rense øreringe');m.push('Børste tænder','Pakke tasker','Sko og jakke på');let e=['Sko og jakke på plads','Madkasser i køkken','Papir fra tasken i papirbakken','Taske på plads','Vaske hænder'];if(id=='manfred'){e.splice(4,0,'Idrætstaske tømmes','Tjekke om der er lektier')}let a=['Rydde op inden aftensmad','Vaske hænder og tisse inden aftensmad','Tøm bordet efter aftensmad','Tøj til vask','Nattøj på'];if(id!='manfred')a.push('Rede hår');if(id=='luna')a.push('Rense øreringe');a.push('Børste tænder','Læse bog','Lave lektier');return{Morgen:m,Eftermiddag:e,Aften:a}}function openChild(id){current=id;document.getElementById('home').classList.add('hidden');document.getElementById('child').classList.remove('hidden');document.getElementById('name').innerText=kids[id].a+' '+kids[id].n;let h='';let ts=taskset(id);for(let sec in ts){if(sec==='Eftermiddag'&&!weekday())continue;h+='<h3>'+sec+'</h3>';ts[sec].forEach((t,i)=>{let k=id+'_'+sec+'_'+i;h+='<div class=task><label><input type=checkbox '+(db[k]?'checked':'')+' onchange="toggle(''+k+'')"> '+t+'</label></div>'})}h+='<p><button class=btn onclick="finishDay()">Dagen færdig ⭐</button></p>';document.getElementById('tasks').innerHTML=h;}function toggle(k){db[k]=!db[k];save()}function finishDay(){db[current+'_stars']=getStars(current)+1;alert('Flot klaret! ⭐');save()}function goHome(){document.getElementById('child').classList.add('hidden');document.getElementById('home').classList.remove('hidden')}function updateHome(){let p=0;['luna','ene','manfred'].forEach(id=>{let s=getStars(id);document.getElementById('s'+id).innerText=s;p+=s});document.getElementById('points').innerText=p;document.getElementById('tree').innerText=p<25?'🌱':p<50?'🌿':p<100?'🌳':'🌳🌸'}updateHome();</script></body></html>
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Børnenes Skema</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    margin:0;
+    padding:20px;
+    background:#f4f4f4;
+}
+
+h1,h2,h3{
+    text-align:center;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    max-width:500px;
+    margin:auto;
+}
+
+.barn{
+    padding:20px;
+    border-radius:12px;
+    color:black;
+    font-size:28px;
+    font-weight:bold;
+    text-align:center;
+    cursor:pointer;
+}
+
+.luna{
+    background:#FFD84D;
+}
+
+.ene{
+    background:#FFB6D9;
+}
+
+.manfred{
+    background:#FF6B6B;
+}
+
+.skjult{
+    display:none;
+}
+
+.sektion{
+    background:white;
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:12px;
+}
+
+label{
+    display:block;
+    margin:8px 0;
+}
+
+button{
+    padding:12px 18px;
+    border:none;
+    border-radius:8px;
+    background:#333;
+    color:white;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div id="forside">
+
+<h1>Børnenes Skema</h1>
+
+<div class="menu">
+
+<div class="barn luna" onclick="visBarn('luna')">
+🌙 LUNA
+</div>
+
+<div class="barn ene" onclick="visBarn('ene')">
+🦄 ENE
+</div>
+
+<div class="barn manfred" onclick="visBarn('manfred')">
+🦖 MANFRED
+</div>
+
+</div>
+
+</div>
+
+<div id="barnSide" class="skjult">
+
+<button onclick="tilbage()">← Tilbage</button>
+
+<h2 id="barnNavn"></h2>
+
+<div id="indhold"></div>
+
+</div>
+
+<script>
+
+const weekend =
+new Date().getDay() === 0 ||
+new Date().getDay() === 6;
+
+const opgaver = {
+
+luna: {
+
+navn:"🌙 LUNA",
+
+morgen:[
+"Toilet",
+"Nattøj til vask",
+"Tøj på",
+"Morgenmad",
+"Skål i opvasker",
+"Rede hår",
+"Rense øreringe",
+"Børste tænder",
+"Pakke tasker",
+"Sko og jakke på"
+],
+
+eftermiddag:[
+"Sko og jakke på plads",
+"Madkasser i køkken",
+"Papir fra tasken i papirbakken",
+"Taske på plads",
+"Vaske hænder"
+],
+
+aften:[
+"Rydde op inden aftensmad",
+"Vaske hænder og tisse inden aftensmad",
+"Tøm bordet efter aftensmad",
+"Tøj til vask",
+"Nattøj på",
+"Rede hår",
+"Rense øreringe",
+"Børste tænder",
+"Læse bog",
+"Lave lektier"
+]
+
+},
+
+ene: {
+
+navn:"🦄 ENE",
+
+morgen:[
+"Toilet",
+"Nattøj til vask",
+"Tøj på",
+"Morgenmad",
+"Skål i opvasker",
+"Rede hår",
+"Børste tænder",
+"Pakke tasker",
+"Sko og jakke på"
+],
+
+eftermiddag:[
+"Sko og jakke på plads",
+"Madkasser i køkken",
+"Papir fra tasken i papirbakken",
+"Taske på plads",
+"Vaske hænder"
+],
+
+aften:[
+"Rydde op inden aftensmad",
+"Vaske hænder og tisse inden aftensmad",
+"Tøm bordet efter aftensmad",
+"Tøj til vask",
+"Nattøj på",
+"Rede hår",
+"Børste tænder",
+"Læse bog",
+"Lave lektier"
+]
+
+},
+
+manfred: {
+
+navn:"🦖 MANFRED",
+
+morgen:[
+"Toilet",
+"Nattøj til vask",
+"Tøj på",
+"Morgenmad",
+"Skål i opvasker",
+"Børste tænder",
+"Pakke tasker",
+"Sko og jakke på"
+],
+
+eftermiddag:[
+"Sko og jakke på plads",
+"Madkasser i køkken",
+"Papir fra tasken i papirbakken",
+"Taske på plads",
+"Idrætstaske tømmes",
+"Vaske hænder",
+"Tjekke om der er lektier"
+],
+
+aften:[
+"Rydde op inden aftensmad",
+"Vaske hænder og tisse inden aftensmad",
+"Tøm bordet efter aftensmad",
+"Tøj til vask",
+"Nattøj på",
+"Børste tænder",
+"Læse bog",
+"Lave lektier"
+]
+
+}
+
+};
+
+function visBarn(barn){
+
+document.getElementById("forside").classList.add("skjult");
+document.getElementById("barnSide").classList.remove("skjult");
+
+document.getElementById("barnNavn").innerText =
+opgaver[barn].navn;
+
+let html = "";
+
+html += lavSektion("Morgen", opgaver[barn].morgen, barn+"_morgen");
+
+if(!weekend){
+html += lavSektion("Eftermiddag", opgaver[barn].eftermiddag, barn+"_eftermiddag");
+}
+
+html += lavSektion("Aften", opgaver[barn].aften, barn+"_aften");
+
+document.getElementById("indhold").innerHTML = html;
+}
+
+function lavSektion(titel,liste,prefix){
+
+let html = '<div class="sektion">';
+html += '<h3>'+titel+'</h3>';
+
+liste.forEach((tekst,index)=>{
+
+const key = prefix+"_"+index;
+const checked =
+localStorage.getItem(key)==="true";
+
+html += `
+<label>
+<input
+type="checkbox"
+${checked ? "checked" : ""}
+onchange="gem('${key}', this.checked)">
+${tekst}
+</label>
+`;
+
+});
+
+html += '</div>';
+
+return html;
+}
+
+function gem(key,value){
+localStorage.setItem(key,value);
+}
+
+function tilbage(){
+document.getElementById("barnSide").classList.add("skjult");
+document.getElementById("forside").classList.remove("skjult");
+}
+
+</script>
+
+</body>
+</html>
