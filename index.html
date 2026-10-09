@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Børnenes Skema</title>
+<title>🌙 🦄 🦖 Dagens Opgaver</title>
 
 <style>
 body{
@@ -20,19 +20,26 @@ h1,h2,h3{
 .menu{
     display:flex;
     flex-direction:column;
-    gap:15px;
-    max-width:500px;
+    gap:20px;
+    max-width:600px;
     margin:auto;
 }
 
 .barn{
-    padding:20px;
-    border-radius:12px;
+    padding:50px;
+    min-height:150px;
+    border-radius:20px;
     color:black;
-    font-size:28px;
+    font-size:42px;
     font-weight:bold;
     text-align:center;
     cursor:pointer;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
 }
 
 .luna{
@@ -60,7 +67,15 @@ h1,h2,h3{
 
 label{
     display:block;
-    margin:8px 0;
+    margin:12px 0;
+    font-size:24px;
+}
+
+input[type="checkbox"]{
+    width:28px;
+    height:28px;
+    margin-right:10px;
+    vertical-align:middle;
 }
 
 button{
@@ -70,6 +85,7 @@ button{
     background:#333;
     color:white;
     cursor:pointer;
+    font-size:18px;
 }
 </style>
 </head>
@@ -78,7 +94,7 @@ button{
 
 <div id="forside">
 
-<h1>Børnenes Skema</h1>
+<h1>🌙 🦄 🦖 Dagens Opgaver</h1>
 
 <div class="menu">
 
